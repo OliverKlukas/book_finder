@@ -1,4 +1,5 @@
-import 'package:book_finder/models/Book.dart';
+import 'package:book_finder/models/book.dart';
+import 'package:book_finder/utils/genres.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
@@ -9,39 +10,8 @@ class PublishView extends StatefulWidget {
 }
 
 class _PublishViewState extends State<PublishView> {
-  // list of all supported genres
-  List<String> _genres = [
-    'Drama',
-    'Fantasy',
-    'Novel',
-    'Mythology',
-    'Comic',
-    'Technical',
-    'Science',
-    'Fable',
-    'Sonnet',
-    'Legends',
-    'Tragedy',
-    'Ballads',
-    'Fairy tale',
-    'Romance',
-    'Poetry',
-    'Adventure',
-    'Mystery',
-    'Religion',
-    'Science fiction',
-    'History',
-    'Thriller',
-    'Crime',
-    'Folklore',
-    'Detective',
-    'Horror',
-    'Lyrics',
-    'Childrens tale',
-    'Classic',
-    'Love story',
-    'Other',
-  ];
+  // Get list of supported genres
+  List<String> _genres = genres;
 
   // Book to publish
   Book _newBook = Book(
@@ -63,48 +33,36 @@ class _PublishViewState extends State<PublishView> {
   // assure genre selection bool
   bool _genreSelected = false;
 
-  /// Title Widget: ListTile for title selection
-  Widget _titleTile() {
+  /// Publishing Form Tile: ListTile for entering title, author and description
+  Widget _publishingFormTile(Icon icon, String objective){
     return ListTile(
-      leading: Icon(Icons.menu_book),
+      leading: icon,
       title: TextFormField(
-        decoration: const InputDecoration(
-          hintText: 'Enter book title',
+        decoration: InputDecoration(
+          hintText: 'Enter book $objective',
+          border: objective == 'description' ? OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(5.0)), borderSide: BorderSide(),) : null,
         ),
         autovalidateMode: AutovalidateMode.onUserInteraction,
         validator: (String? value) {
           // Prevent security breaches/invalid inputs by restricting input format
           final inputRestrictions = RegExp(r'^[\w\W]*$');
           if (value == null || value.isEmpty || !inputRestrictions.hasMatch(value)) {
-            return 'Please enter a valid book title using [a-z,A-Z,0-9,common special characters]';
+            return 'Please enter a valid book $objective using [a-z,A-Z,0-9,common special characters]';
           }
           return null;
         },
-        onChanged: (value) => setState(() => _newBook.title = value),
-        onSaved: (value) => setState(() => _newBook.title = value!),
-      ),
-    );
-  }
-
-  /// Author Widget: ListTile for author selection
-  Widget _authorTile() {
-    return ListTile(
-      leading: Icon(Icons.person),
-      title: TextFormField(
-        decoration: const InputDecoration(
-          hintText: 'Enter author',
-        ),
-        autovalidateMode: AutovalidateMode.onUserInteraction,
-        onChanged: (value) => setState(() => _newBook.author = value),
-        onSaved: (value) => setState(() => _newBook.author = value!),
-        validator: (String? value) {
-          // Prevent security breaches/invalid inputs by restricting input format
-          final inputRestrictions = RegExp(r'^[\w\W]*$');
-          if (value == null || value.isEmpty || !inputRestrictions.hasMatch(value)) {
-            return 'Please enter a valid book author using [a-z,A-Z,0-9,common special characters]';
+        minLines: objective == 'description' ? 5 : 1,
+        maxLines: objective == 'description' ? null : 1,
+        onChanged: (value) => setState((){
+          switch(objective){
+            case 'author': {_newBook.author = value;}
+            break;
+            case 'title': {_newBook.title = value;}
+            break;
+            case 'description': {_newBook.description = value;}
+            break;
           }
-          return null;
-        },
+        }),
       ),
     );
   }
@@ -189,43 +147,12 @@ class _PublishViewState extends State<PublishView> {
     );
   }
 
-  /// Description Widget: ListTile to enter description
-  Widget _descriptionTile() {
-    return ListTile(
-      leading: Icon(Icons.text_snippet_outlined),
-      title: TextFormField(
-        autovalidateMode: AutovalidateMode.onUserInteraction,
-        decoration: InputDecoration(
-          hintText: 'Enter description',
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.all(Radius.circular(5.0)),
-            borderSide: BorderSide(),
-          ),
-        ),
-        keyboardType: TextInputType.multiline,
-        minLines: 5,
-        maxLines: null,
-        validator: (String? value) {
-          // Prevent security breaches/invalid inputs by restricting input format
-          final inputRestrictions = RegExp(r'^[\w\W]*$');
-          if (value == null || value.isEmpty || !inputRestrictions.hasMatch(value)) {
-            return 'Please enter a valid book description using [a-z,A-Z,0-9,common special characters]';
-          }
-          return null;
-        },
-        onChanged: (value) => setState(() => _newBook.description = value),
-        onSaved: (value) => setState(() => _newBook.description = value!),
-      ),
-    );
-  }
-
   /// Publication Widget: Button to publish the newly created book
   Widget _publicationButton() {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 16.0),
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(
-          primary: Colors.blueGrey,
           padding: EdgeInsets.symmetric(horizontal: 35, vertical: 15),
           textStyle: TextStyle(fontSize: 20),
         ),
@@ -245,45 +172,41 @@ class _PublishViewState extends State<PublishView> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        iconTheme: IconThemeData(
-          color: Colors.black, //change your color here
-        ),
+        iconTheme: Theme.of(context).iconTheme,
         backgroundColor: Colors.white,
         title: Text(
           'Publish a new book',
-          style: TextStyle(
-            color: Colors.black,
-            fontSize: 30,
-            fontWeight: FontWeight.bold,
-          ),
+          style: Theme.of(context).textTheme.headline1,
         ),
       ),
-      body: Column(children: <Widget>[
-        Container(
-          width: 190.0,
-          height: 190.0,
-          margin: EdgeInsets.only(top: 40.0, bottom: 20.0),
-          decoration: new BoxDecoration(
-            shape: BoxShape.circle,
-            image: new DecorationImage(
-              fit: BoxFit.fill,
-              image: _genres.contains(_newBook.genre)
-                  ? Image.asset(
-                          'images/${_newBook.genre.toLowerCase().replaceAll(' ', '')}.png')
-                      .image
-                  : Image.asset('images/other.png').image,
+      body: ListView(children: <Widget>[
+        Center(
+          child:Container(
+            width: 190.0,
+            height: 190.0,
+            margin: EdgeInsets.only(top: 40.0, bottom: 20.0),
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              image: DecorationImage(
+                fit: BoxFit.fill,
+                image: _genres.contains(_newBook.genre)
+                    ? Image.asset(
+                            'images/${_newBook.genre.toLowerCase().replaceAll(' ', '')}.png')
+                        .image
+                    : Image.asset('images/other.png').image,
+              ),
             ),
-          ),
+          )
         ),
         Form(
           key: _formKey,
           child: Column(
             children: <Widget>[
-              _titleTile(),
-              _authorTile(),
+              _publishingFormTile(Icon(Icons.menu_book), 'title'),
+              _publishingFormTile(Icon(Icons.person), 'author'),
               _genreTile(),
               _publicationDateTile(),
-              _descriptionTile(),
+              _publishingFormTile(Icon(Icons.text_snippet_outlined), 'description'),
               _publicationButton(),
             ],
           ),

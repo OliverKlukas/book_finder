@@ -1,5 +1,5 @@
-import 'package:book_finder/models/Book.dart';
-import 'package:book_finder/views/DetailsView.dart';
+import 'package:book_finder/models/book.dart';
+import 'package:book_finder/views/details_view.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 

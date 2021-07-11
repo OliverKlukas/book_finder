@@ -1,7 +1,7 @@
-import 'package:book_finder/components/LibraryTileWidget.dart';
-import 'package:book_finder/components/PopupDeletionDialog.dart';
-import 'package:book_finder/models/Book.dart';
-import 'package:book_finder/views/PublishView.dart';
+import 'package:book_finder/components/library_tile_widget.dart';
+import 'package:book_finder/components/popup_deletion_dialog.dart';
+import 'package:book_finder/models/book.dart';
+import 'package:book_finder/views/publish_view.dart';
 import 'package:flutter/material.dart';
 
 class LibraryView extends StatefulWidget {
@@ -126,7 +126,7 @@ class _LibraryViewState extends State<LibraryView> {
                       ),
                       key: Key(_displayedBooks[index].title),
                       confirmDismiss: (DismissDirection direction) async{
-                        return await popupDeletionDialog(index, context);
+                        return await popupDeletionDialog(context);
                       },
                       onDismissed: (DismissDirection direction) async {
                         setState(() {

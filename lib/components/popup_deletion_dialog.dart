@@ -1,7 +1,7 @@
 // confirm to delete popup
 import 'package:flutter/material.dart';
 
-Future<bool?> popupDeletionDialog(int index, BuildContext context) {
+Future<bool?> popupDeletionDialog(BuildContext context) {
   return showDialog(
     context: context,
     builder: (BuildContext context) {

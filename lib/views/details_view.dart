@@ -1,4 +1,4 @@
-import 'package:book_finder/models/Book.dart';
+import 'package:book_finder/models/book.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -17,20 +17,14 @@ class _DetailsViewState extends State<DetailsView> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        iconTheme: IconThemeData(
-          color: Colors.black, //change your color here
-        ),
+        iconTheme: Theme.of(context).iconTheme,
         backgroundColor: Colors.white,
-        title: Text(widget.book.title,
-          style: TextStyle(
-            color: Colors.black,
-            fontSize: 30,
-            fontWeight: FontWeight.bold,
-          ),
+        title: Text('Book Details',
+          style: Theme.of(context).textTheme.headline1,
         ),
       ),
       body: Container(
-        child: Column(
+        child: ListView(
           children: <Widget>[
             Text(widget.book.title),
             Text(widget.book.author),
