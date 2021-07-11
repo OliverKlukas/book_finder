@@ -11,7 +11,17 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Book Finder',
       theme: ThemeData(
-        primarySwatch: Colors.blue,
+        primarySwatch: Colors.blueGrey,
+        iconTheme: IconThemeData(
+          color: Colors.black, //change your color here
+        ),
+        textTheme: TextTheme(
+          headline1: TextStyle(
+            color: Colors.black,
+            fontSize: 30,
+            fontWeight: FontWeight.bold,
+          ),
+        )
       ),
       home: LibraryView(),
     );

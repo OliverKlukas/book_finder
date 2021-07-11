@@ -23,5 +23,4 @@ class Book {
         description.toLowerCase().contains(query.toLowerCase()) ||
         genre.toLowerCase().contains(query.toLowerCase());
   }
-
 }

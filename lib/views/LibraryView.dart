@@ -1,4 +1,4 @@
-import 'package:book_finder/components/BookCardWidget.dart';
+import 'package:book_finder/components/LibraryTileWidget.dart';
 import 'package:book_finder/components/PopupDeletionDialog.dart';
 import 'package:book_finder/models/Book.dart';
 import 'package:book_finder/views/PublishView.dart';
@@ -30,10 +30,10 @@ class _LibraryViewState extends State<LibraryView> {
     super.initState();
   }
 
-  // method that will start the process of publishing new books and capture the added element
+  /// method that will start the process of publishing new books and capture the added element
   void _navigateAndPublishBooks(BuildContext context) async {
     // receive new book from PublishView after validation
-    final Book newBook = await Navigator.push(
+    final Book? newBook = await Navigator.push(
       context,
       MaterialPageRoute(
         builder: (context) => PublishView(),
@@ -42,15 +42,18 @@ class _LibraryViewState extends State<LibraryView> {
 
     // add newly published book to collection
     setState(() {
+      if (newBook != null) {
       _displayedBooks.add(newBook);
+      _allBooks.add(newBook);
+      }
     });
   }
 
   // editing controller for search
-  TextEditingController editingController = TextEditingController();
+  TextEditingController _editingController = TextEditingController();
 
-  // method to search the library for books/authors/genres
-  void filterSearchResults(String query) {
+  /// method to search the library for books/authors/genres
+  void _filterSearchResults(String query) {
     if(query.isNotEmpty) {
       List<Book> displayQuery = [];
       _allBooks.forEach((item) {
@@ -71,18 +74,15 @@ class _LibraryViewState extends State<LibraryView> {
     }
   }
 
-  // build the complete library view widget
+  /// build the complete library view widget
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        iconTheme: Theme.of(context).iconTheme,
         backgroundColor: Colors.white,
         title: Text('Library',
-          style: TextStyle(
-            color: Colors.black,
-            fontSize: 30,
-            fontWeight: FontWeight.bold,
-          ),
+          style: Theme.of(context).textTheme.headline1,
         ),
       ),
       body: Container(
@@ -92,9 +92,9 @@ class _LibraryViewState extends State<LibraryView> {
               padding: EdgeInsets.only(top: 16,left: 16,right: 16),
               child: TextField(
                 onChanged: (value) {
-                  filterSearchResults(value);
+                  _filterSearchResults(value);
                 },
-                controller: editingController,
+                controller: _editingController,
                 decoration: InputDecoration(
                   hintText: "What are you searching for?",
                   hintStyle: TextStyle(color: Colors.grey.shade600),
@@ -114,6 +114,7 @@ class _LibraryViewState extends State<LibraryView> {
             Expanded(
                 child: ListView.builder(
                   itemCount: _displayedBooks.length,
+                  padding: EdgeInsets.all(10.0),
                   itemBuilder: (BuildContext context, int index) {
                     return Dismissible(
                       direction: DismissDirection.endToStart,
@@ -132,7 +133,7 @@ class _LibraryViewState extends State<LibraryView> {
                           _displayedBooks.removeAt(index);
                         });
                       },
-                      child: bookCard(_displayedBooks[index], context), // TODO: is this the right way or should I make the BookCardWidget class it's own stateful widget?
+                      child: LibraryTileWidget(book: _displayedBooks[index]),
                     );
                   },
                 ),
@@ -141,7 +142,6 @@ class _LibraryViewState extends State<LibraryView> {
         )
       ),
       floatingActionButton: FloatingActionButton(
-        backgroundColor: Colors.blueGrey,
         onPressed: () {
           _navigateAndPublishBooks(context);
         },
