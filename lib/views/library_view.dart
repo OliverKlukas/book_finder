@@ -25,13 +25,13 @@ class _LibraryViewState extends State<LibraryView> {
     super.initState();
   }
 
-  /// method that will start the process of publishing new books and capture the added element
-  void _navigateAndPublishBooks(BuildContext context) async {
+  /// method that will start the process of publishing/editing new books and capture the added element
+  void navigateAndPublishBooks(Book editBook) async {
     // receive new book from PublishView after validation
     final Book? newBook = await Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => PublishView(),
+        builder: (context) => PublishView(editBook),
       ),
     );
 
@@ -128,7 +128,7 @@ class _LibraryViewState extends State<LibraryView> {
                           _displayedBooks.removeAt(index);
                         });
                       },
-                      child: LibraryTileWidget(book: _displayedBooks[index]),
+                      child: LibraryTileWidget(book: _displayedBooks[index], editCallback: navigateAndPublishBooks,),
                     );
                   },
                 ),
@@ -138,7 +138,9 @@ class _LibraryViewState extends State<LibraryView> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          _navigateAndPublishBooks(context);
+          navigateAndPublishBooks(
+              new Book(title: '', author: '', date: DateTime.parse('2000-01-01'), genre: 'Other', description: '')
+          );
         },
         tooltip: 'Add books',
         child: Icon(

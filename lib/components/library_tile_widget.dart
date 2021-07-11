@@ -66,13 +66,22 @@ class _BookDescription extends StatelessWidget {
   }
 }
 
+// typedef for allowing to access the parent function to edit books
+typedef EditCallback = void Function(Book book);
+
+/// Widget: library tile
 class LibraryTileWidget extends StatelessWidget {
   const LibraryTileWidget({
     Key? key,
     required this.book,
+    required this.editCallback,
   }) : super(key: key);
 
+  // book to show in tile
   final Book book;
+
+  // callback to edit a book
+  final EditCallback editCallback;
 
   @override
   Widget build(BuildContext context) {
@@ -102,6 +111,17 @@ class LibraryTileWidget extends StatelessWidget {
                 )
               ],
             ),
+          ),
+          trailing: PopupMenuButton<String>(
+            onSelected: (_){
+              editCallback(book);
+            },
+            itemBuilder: (BuildContext context) => <PopupMenuEntry<String>>[
+              const PopupMenuItem<String>(
+                value: 'Edit',
+                child: Text('Edit'),
+              ),
+            ],
           ),
           onTap: () {
             Navigator.push(

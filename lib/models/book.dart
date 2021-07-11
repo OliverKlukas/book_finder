@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 /// Data Model for a single book
 class Book {
@@ -16,11 +17,12 @@ class Book {
     required this.description,
   });
 
-  // Enable search for books based on title, author, genre or description
+  // Enable search for books based on title, author, genre, description or publication year/month
   bool contains(String query) {
     return title.toLowerCase().contains(query.toLowerCase()) ||
         author.toLowerCase().contains(query.toLowerCase()) ||
         description.toLowerCase().contains(query.toLowerCase()) ||
+        DateFormat('M.y').format(date).toString().toLowerCase().contains(query.toLowerCase()) ||
         genre.toLowerCase().contains(query.toLowerCase());
   }
 }

@@ -5,19 +5,15 @@ import 'package:intl/intl.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
 
 class PublishView extends StatefulWidget {
+  // hand-over book to publish/edit
+  Book _newBook;
+  PublishView(this._newBook);
+
   @override
   State<StatefulWidget> createState() => new _PublishViewState();
 }
 
 class _PublishViewState extends State<PublishView> {
-  // Book to publish
-  Book _newBook = Book(
-      title: '',
-      author: '',
-      date: DateTime.parse('2000-01-01'),
-      genre: 'Other',
-      description: '');
-
   // Controller to change date
   TextEditingController _date = new TextEditingController();
 
@@ -35,6 +31,7 @@ class _PublishViewState extends State<PublishView> {
     return ListTile(
       leading: icon,
       title: TextFormField(
+        //initialValue: , // TODO: hier weiter machen morgen musst nur noch uebergeben, dass das klappt!
         decoration: InputDecoration(
           hintText: 'Enter book $objective',
           border: objective == 'description' ? OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(5.0)), borderSide: BorderSide(),) : null,
@@ -44,7 +41,7 @@ class _PublishViewState extends State<PublishView> {
           // Prevent security breaches/invalid inputs by restricting input format
           final inputRestrictions = RegExp(r'^[\w\W]*$');
           if (value == null || value.isEmpty || !inputRestrictions.hasMatch(value)) {
-            return 'Please enter a valid book $objective using [a-z,A-Z,0-9,common special characters]';
+            return 'Please enter a valid book $objective';
           }
           return null;
         },
@@ -52,11 +49,11 @@ class _PublishViewState extends State<PublishView> {
         maxLines: objective == 'description' ? null : 1,
         onChanged: (value) => setState((){
           switch(objective){
-            case 'author': {_newBook.author = value;}
+            case 'author': {widget._newBook.author = value;}
             break;
-            case 'title': {_newBook.title = value;}
+            case 'title': {widget._newBook.title = value;}
             break;
-            case 'description': {_newBook.description = value;}
+            case 'description': {widget._newBook.description = value;}
             break;
           }
         }),
@@ -90,17 +87,17 @@ class _PublishViewState extends State<PublishView> {
         onSuggestionSelected: (String suggestion) {
           this._typeAheadController.text = suggestion;
           setState(() {
-            _newBook.genre = suggestion;
+            widget._newBook.genre = suggestion;
             _genreSelected = true; // TODO: this is still trickable but worth fixing?
           });
         },
         validator: (String? value) {
           if (value == null || value.isEmpty || !genres.contains(value) || !_genreSelected) {
-            return 'Please select a genre from the suggestion list';
+            return 'Please select a book genre from the suggestion list';
           }
           return null;
         },
-        onSaved: (value) => setState(() => _newBook.genre = value!),
+        onSaved: (value) => setState(() => widget._newBook.genre = value!),
       ),
     );
   }
@@ -116,10 +113,10 @@ class _PublishViewState extends State<PublishView> {
               initialDate: DateTime.now(),
               firstDate: DateTime(0),
               lastDate: DateTime(2022)))!;
-          if (picked != _newBook.date)
+          if (picked != widget._newBook.date)
             setState(() {
-              _newBook.date = picked;
-              _date.text = DateFormat('dd.MM.y').format(_newBook.date);
+              widget._newBook.date = picked;
+              _date.text = DateFormat('dd.MM.y').format(widget._newBook.date);
             });
         },
         child: AbsorbPointer(
@@ -156,7 +153,7 @@ class _PublishViewState extends State<PublishView> {
         onPressed: () {
           // Only process the data if the form is filled out validly
           if (_formKey.currentState!.validate()) {
-            Navigator.pop(context, _newBook);
+            Navigator.pop(context, widget._newBook);
           }
         },
         child: const Text('Publish'),
@@ -186,9 +183,9 @@ class _PublishViewState extends State<PublishView> {
               shape: BoxShape.circle,
               image: DecorationImage(
                 fit: BoxFit.fill,
-                image: genres.contains(_newBook.genre)
+                image: genres.contains(widget._newBook.genre)
                     ? Image.asset(
-                            'images/${_newBook.genre.toLowerCase().replaceAll(' ', '')}.png')
+                            'images/${widget._newBook.genre.toLowerCase().replaceAll(' ', '')}.png')
                         .image
                     : Image.asset('images/other.png').image,
               ),
