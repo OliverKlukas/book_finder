@@ -1,5 +1,5 @@
 import 'package:book_finder/models/book.dart';
-import 'package:book_finder/utils/genres.dart';
+import 'package:book_finder/utils/static_data.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
@@ -10,9 +10,6 @@ class PublishView extends StatefulWidget {
 }
 
 class _PublishViewState extends State<PublishView> {
-  // Get list of supported genres
-  List<String> _genres = genres;
-
   // Book to publish
   Book _newBook = Book(
       title: '',
@@ -80,7 +77,7 @@ class _PublishViewState extends State<PublishView> {
             )
         ),
         suggestionsCallback: (pattern) {
-          return _genres.where((String element) => element.toLowerCase().contains(pattern.toLowerCase())).toList();
+          return genres.where((String element) => element.toLowerCase().contains(pattern.toLowerCase())).toList();
         },
         itemBuilder: (context, String suggestion) {
           return ListTile(
@@ -98,7 +95,7 @@ class _PublishViewState extends State<PublishView> {
           });
         },
         validator: (String? value) {
-          if (value == null || value.isEmpty || !_genres.contains(value) || !_genreSelected) {
+          if (value == null || value.isEmpty || !genres.contains(value) || !_genreSelected) {
             return 'Please select a genre from the suggestion list';
           }
           return null;
@@ -189,7 +186,7 @@ class _PublishViewState extends State<PublishView> {
               shape: BoxShape.circle,
               image: DecorationImage(
                 fit: BoxFit.fill,
-                image: _genres.contains(_newBook.genre)
+                image: genres.contains(_newBook.genre)
                     ? Image.asset(
                             'images/${_newBook.genre.toLowerCase().replaceAll(' ', '')}.png')
                         .image

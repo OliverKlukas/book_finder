@@ -1,6 +1,7 @@
 import 'package:book_finder/components/library_tile_widget.dart';
 import 'package:book_finder/components/popup_deletion_dialog.dart';
 import 'package:book_finder/models/book.dart';
+import 'package:book_finder/utils/static_data.dart';
 import 'package:book_finder/views/publish_view.dart';
 import 'package:flutter/material.dart';
 
@@ -11,14 +12,7 @@ class LibraryView extends StatefulWidget {
 
 class _LibraryViewState extends State<LibraryView> {
   // Mock book library
-  List<Book> _allBooks = [
-    Book(title: 'Life 3.0: Being Human in the Age of Artificial Intelligence', author: 'Max Tegmark', date: DateTime.parse('2017-08-23'), genre: 'Science', description: 'Description...'),
-    Book(title: 'Permanent Record', author: 'Edward Snowden', date: DateTime.parse('2019-09-17'), genre: 'Technical', description: 'Description...'),
-    Book(title: 'Start-up Nation: The story of Israel\'s Economic Miracle', author: 'Dan Senor and Saul Singer', date: DateTime.parse('2011-09-01'), genre: 'History', description: 'Description...'),
-    Book(title: 'The 4-Hour Work Week', author: 'Timothy Ferris', date: DateTime.parse('2007-04-24'), genre: 'Technical', description: 'Description...'),
-    Book(title: '1984', author: 'George Orwell', date: DateTime.parse('1984-08-06'), genre: 'Science Fiction', description: 'Description...'),
-    Book(title: 'Sapiens: A Brief History of Humankind', author: 'Yuval Noah Harari', date: DateTime.parse('2015-04-30'), genre: 'History', description: 'Description...')
-  ];
+  List<Book> _allBooks = [];
 
   // list of displayed books
   List<Book> _displayedBooks = [];
@@ -26,6 +20,7 @@ class _LibraryViewState extends State<LibraryView> {
   // initialize view
   @override
   void initState() {
+    _allBooks.addAll(libraryBooks);
     _displayedBooks.addAll(_allBooks);
     super.initState();
   }
