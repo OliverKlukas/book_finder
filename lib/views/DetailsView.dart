@@ -1,5 +1,6 @@
 import 'package:book_finder/models/Book.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class DetailsView extends StatefulWidget {
   // hand-over book for detailed view
@@ -33,7 +34,7 @@ class _DetailsViewState extends State<DetailsView> {
           children: <Widget>[
             Text(widget.book.title),
             Text(widget.book.author),
-            Text(widget.book.date),
+            Text(DateFormat('dd.MM.y').format(widget.book.date).toString(),),
             Text(widget.book.genre),
             Text(widget.book.description),
           ],

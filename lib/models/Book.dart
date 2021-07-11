@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 
 /// Data Model for a single book
 class Book {
-  final String title;
-  final String author;
-  final String date;
-  final String genre;
-  final String description;
+  String title;
+  String author;
+  DateTime date;
+  String genre;
+  String description;
 
   Book({
     required this.title,

@@ -2,6 +2,7 @@
 import 'package:book_finder/models/Book.dart';
 import 'package:book_finder/views/DetailsView.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 Widget bookCard(Book book, BuildContext context) {
   return Card(
@@ -23,7 +24,7 @@ Widget bookCard(Book book, BuildContext context) {
                   children: <Widget>[
                     Text(book.title, style: TextStyle(fontSize: 20),),
                     Text(book.author, style: TextStyle(fontSize: 16),),
-                    Text(book.date, style: TextStyle(fontSize: 16),),
+                    Text(DateFormat('dd.MM.y').format(book.date).toString(), style: TextStyle(fontSize: 16),),
                     Text(book.genre, style: TextStyle(fontSize: 16),),
                     SizedBox(height: 6,),
                   ],
