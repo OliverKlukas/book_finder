@@ -87,40 +87,41 @@ class _LibraryViewState extends State<LibraryView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
+        appBar: AppBar(
         iconTheme: Theme.of(context).iconTheme,
         backgroundColor: Colors.white,
         title: Text('Library',
           style: Theme.of(context).textTheme.headline1,
         ),
       ),
-      body: Container(
-        child: Column(
-          children: <Widget>[
-            Padding(
-              padding: EdgeInsets.only(top: 16,left: 16,right: 16),
-              child: TextField(
-                onChanged: (value) {
-                  _filterSearchResults(value);
-                },
-                controller: _editingController,
-                decoration: InputDecoration(
-                  hintText: "What are you searching for?",
-                  hintStyle: TextStyle(color: Colors.grey.shade600),
-                  prefixIcon: Icon(Icons.search,color: Colors.grey.shade600, size: 20,),
-                  filled: true,
-                  fillColor: Colors.grey.shade100,
-                  contentPadding: EdgeInsets.all(8),
-                  enabledBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(20),
-                      borderSide: BorderSide(
-                          color: Colors.grey.shade100
-                      )
+      body: LayoutBuilder(
+        builder: (BuildContext context, BoxConstraints constraints) {
+          return Column(
+            children: <Widget>[
+              Padding(
+                padding: EdgeInsets.only(top: 16,left: 16,right: 16),
+                child: TextField(
+                  onChanged: (value) {
+                    _filterSearchResults(value);
+                  },
+                  controller: _editingController,
+                  decoration: InputDecoration(
+                    hintText: "What are you searching for?",
+                    hintStyle: TextStyle(color: Colors.grey.shade600),
+                    prefixIcon: Icon(Icons.search,color: Colors.grey.shade600, size: 20,),
+                    filled: true,
+                    fillColor: Colors.grey.shade100,
+                    contentPadding: EdgeInsets.all(8),
+                    enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(20),
+                        borderSide: BorderSide(
+                            color: Colors.grey.shade100
+                        )
+                    ),
                   ),
                 ),
               ),
-            ),
-            Expanded(
+              Expanded(
                 child: ListView.builder(
                   itemCount: _displayedBooks.length,
                   padding: EdgeInsets.all(10.0),
@@ -133,7 +134,7 @@ class _LibraryViewState extends State<LibraryView> {
                         padding: EdgeInsets.symmetric(horizontal: 10.0),
                         child: Icon(Icons.delete),
                       ),
-                      key: Key(_displayedBooks[index].title),
+                      key: Key(_displayedBooks[index].title), // TODO: make this the backend id?
                       confirmDismiss: (DismissDirection direction) async{
                         return await popupDeletionDialog(context);
                       },
@@ -143,13 +144,14 @@ class _LibraryViewState extends State<LibraryView> {
                           _allBooks.removeAt(index);
                         });
                       },
-                      child: LibraryTileWidget(book: _displayedBooks[index], editCallback: navigateAndPublishBooks, index: index),
+                      child: LibraryTileWidget(book: _displayedBooks[index], editCallback: navigateAndPublishBooks, index: index, maxHeight: constraints.maxHeight, maxWidth: constraints.maxWidth),
                     );
                   },
                 ),
-            ),
-          ],
-        )
+              ),
+            ],
+          );
+        },
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {

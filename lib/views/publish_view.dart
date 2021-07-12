@@ -118,7 +118,7 @@ class _PublishViewState extends State<PublishView> {
           this._typeAheadController.text = suggestion;
           setState(() {
             widget._newBook.genre = suggestion;
-            _genreSelected = true; // TODO: this is still trickable but worth fixing?
+            _genreSelected = true;
           });
         },
         validator: (String? value) {
@@ -156,7 +156,7 @@ class _PublishViewState extends State<PublishView> {
             decoration: InputDecoration(
               hintText: 'Select publication date',
             ),
-            validator: (String? value) { //TODO: hier kann eine exception geworfen werden wenn null kommt, catchen oder unbehandelt lassen, programmablauf nicht gestoert
+            validator: (String? value) {
               // Assuring only valid dates in format DD.MM.YYYY are allowed
               final inputRestrictions = RegExp(r'^[0-9]{2}\.[0-9]{2}\.[0-9]{4}$');
               if (value == null || value.isEmpty || !inputRestrictions.hasMatch(value)) {

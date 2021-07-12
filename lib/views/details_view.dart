@@ -25,54 +25,66 @@ class _DetailsViewState extends State<DetailsView> {
           style: Theme.of(context).textTheme.headline1,
         ),
       ),
-      body: Center(
-        child: AspectRatio(
-          aspectRatio: 75/100,
+      body: LayoutBuilder(
+          builder: (BuildContext context, BoxConstraints constraints) {
+        return Center(
           child: Container(
-            margin: EdgeInsets.only(top: 40.0, bottom: 30.0),
-            child: ListView(children: <Widget>[
-              Center(
+            constraints: BoxConstraints(maxWidth: 750.0),
+            margin: EdgeInsets.only(
+                top: constraints.maxHeight / 20,
+                bottom: constraints.maxHeight / 20),
+            child: ListView(
+              children: <Widget>[
+                Center(
                   child: Container(
-                    width: 190.0,
-                    height: 190.0,
-                    margin: EdgeInsets.only(bottom: 30.0),
+                    width: constraints.maxHeight / 4,
+                    height: constraints.maxHeight / 4,
+                    margin: EdgeInsets.only(bottom: constraints.maxHeight / 25),
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
                       image: DecorationImage(
                         fit: BoxFit.fill,
-                        image: Image.asset('images/${widget.book.genre.toLowerCase().replaceAll(' ', '')}.png').image,
+                        image: Image.asset(
+                            'images/${widget.book.genre.toLowerCase().replaceAll(' ', '')}.png')
+                            .image,
                       ),
                     ),
-                  )
-              ),
-              Column(
-                children: <Widget>[
-                  ListTile(
-                    title: Text(
-                      widget.book.title,
-                      style: TextStyle(
-                        fontSize: 30,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    subtitle: Text('written by ${widget.book.author}'),
-                    trailing: Text('${widget.book.genre},\n${DateFormat('dd.MM.y').format(widget.book.date).toString()}', textAlign: TextAlign.right,),
                   ),
-                  ListTile(
-                    title: Column(
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: <Widget>[
-                        SizedBox(height: 20),
-                        Text(widget.book.description),
-                      ],
-                    ),
-                  )
-                ],
-              ),
-            ]),
+                ),
+                Container(
+                  child: Column(
+                    children: <Widget>[
+                      ListTile(
+                        title: Text(
+                          widget.book.title,
+                          style: TextStyle(
+                            fontSize: 30,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        subtitle: Text('written by ${widget.book.author}'),
+                        trailing: Text(
+                          '${widget.book.genre},\n${DateFormat('dd.MM.y').format(widget.book.date).toString()}',
+                          textAlign: TextAlign.right,
+                        ),
+                      ),
+                      ListTile(
+                        title: Column(
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: <Widget>[
+                            SizedBox(height: constraints.maxHeight / 40),
+                            Text(widget.book.description),
+                          ],
+                        ),
+                      )
+                    ],
+                  ),
+                ),
+              ],
+            ),
           ),
-        ),
-      ),
+        );
+      }),
     );
   }
 }

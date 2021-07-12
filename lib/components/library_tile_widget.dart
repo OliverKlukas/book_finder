@@ -20,18 +20,18 @@ class _BookDescription extends StatelessWidget {
             children: <Widget>[
               Text(
                 book.title,
-                maxLines: 2,
-                overflow: TextOverflow.ellipsis,
-                style: const TextStyle(
+                style: TextStyle(
                   fontSize: 22.0,
                   fontWeight: FontWeight.bold,
                 ),
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
               ),
-              const Padding(padding: EdgeInsets.only(bottom: 2.0)),
               Text(
-                'written by ${book.author}',
-                style: const TextStyle(
-                  fontSize: 16.0,
+                book.author,
+                maxLines: 1,
+                style: TextStyle(
+                  fontSize: 18.0,
                   color: Colors.black54,
                 ),
               ),
@@ -46,15 +46,17 @@ class _BookDescription extends StatelessWidget {
             children: <Widget>[
               Text(
                 book.genre,
-                style: const TextStyle(
-                  fontSize: 16.0,
+                maxLines: 1,
+                style: TextStyle(
+                  fontSize: 18.0,
                   color: Colors.black87,
                 ),
               ),
               Text(
-                'Published on ' + DateFormat('dd.MM.y').format(book.date).toString(),
-                style: const TextStyle(
-                  fontSize: 16.0,
+                DateFormat('dd.MM.y').format(book.date),
+              maxLines: 1,
+                style: TextStyle(
+                  fontSize: 18.0,
                   color: Colors.black54,
                 ),
               ),
@@ -71,30 +73,48 @@ typedef EditCallback = void Function(Book book, int index);
 
 /// Widget: library tile
 class LibraryTileWidget extends StatelessWidget {
-  const LibraryTileWidget({
+  LibraryTileWidget({
     Key? key,
     required this.book,
     required this.editCallback,
     required this.index,
+    required this.maxWidth,
+    required this.maxHeight,
   }) : super(key: key);
 
+  // size dimensions to ensure responsive design
+  double maxHeight;
+  double maxWidth;
+
   // book to show in tile
-  final Book book;
+  Book book;
 
   // index to enable in-place like editing
-  final int index;
+  int index;
 
   // callback to edit a book
-  final EditCallback editCallback;
+  EditCallback editCallback;
+
+  /// method to enable responsive tile scaling
+  double _responsiveSize(){
+    // landscape format
+    if(maxWidth > maxHeight){
+      return maxHeight/6 > 100.0 ? maxHeight/6 : 100.0;
+    }
+    // portrait format
+    else{
+      return maxWidth/6 > 100.0 ? maxWidth/6 : 100.0;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return Card(
         color: Colors.white,
         child: ListTile(
-          contentPadding: EdgeInsets.only(left: 16,right: 16,top: 10,bottom: 10),
+          contentPadding: EdgeInsets.only(left: 10,right: 10,top: 5,bottom: 5),
           title: SizedBox(
-            height: 140, // TODO: with that I should be able to control the size of the list depending on web/mobile
+            height: _responsiveSize(),
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
@@ -104,12 +124,11 @@ class LibraryTileWidget extends StatelessWidget {
                     backgroundImage: Image.asset(
                             'images/${book.genre.toLowerCase().replaceAll(' ', '')}.png')
                         .image,
-                    maxRadius: 70,
                   ),
                 ),
                 Expanded(
                   child: Padding(
-                    padding: const EdgeInsets.fromLTRB(20.0, 0.0, 2.0, 0.0),
+                    padding: EdgeInsets.fromLTRB(20.0, 0.0, 2.0, 0.0),
                     child: _BookDescription(book: book),
                   ),
                 )

@@ -2,7 +2,7 @@
 
 **WIP - do not publish before submission**
 
-Hi there :wave:! This is my book finder implementation for the assessment challenge by Digital Product School. I chose a Flutter-based application with a Firebase backend with deployment to the Firebase cloud. Fully working prototypes including frontend & backend for Android, iOS and web as seen below. You may find the deployed web version at: TODO. Enjoy :closed_book:!
+Hi there :wave:! This is my book finder implementation for the assessment challenge by Digital Product School. I chose a responsive Flutter-based application with a Firebase backend with deployment to the Firebase cloud. Fully working prototypes including frontend & backend for Android, iOS and web as seen below. You may find the deployed web version at: TODO. Enjoy :closed_book:!
 
 ## Full product at a glance
 | Android | iOS | Web app |
