@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 /// Data Model for a single book
-class Book {
+class Book { // TODO: in the backend give this an actual identifier to ensure edit/removing atomicy
   String title;
   String author;
   DateTime date;

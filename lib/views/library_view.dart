@@ -26,23 +26,37 @@ class _LibraryViewState extends State<LibraryView> {
   }
 
   /// method that will start the process of publishing/editing new books and capture the added element
-  void navigateAndPublishBooks(Book editBook) async {
+  void navigateAndPublishBooks(Book? editBook, int? index) async {
     // receive new book from PublishView after validation
     final Book? newBook = await Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => PublishView(editBook),
+        builder: (context) => editBook == null ? PublishView.empty() : PublishView(editBook),
       ),
     );
 
     // add newly published book to collection
-    setState(() {
+    setState(() { //TODO: improve this with proper backend
+      // check that publish form wasn't exited early
       if (newBook != null) {
-      _displayedBooks.add(newBook);
-      _allBooks.add(newBook);
+        // Replace an already existing book with edited version
+        if(editBook != null){
+          _displayedBooks.remove(editBook);
+          _allBooks.remove(editBook);
+        }
+        // Publish book
+        if(index != null){
+          _displayedBooks.insert(index, newBook);
+          _allBooks.insert(index, newBook);
+        }
+        else{
+          _displayedBooks.insert(0, newBook);
+          _allBooks.insert(0, newBook);
+        }
       }
     });
   }
+
 
   // editing controller for search
   TextEditingController _editingController = TextEditingController();
@@ -126,9 +140,10 @@ class _LibraryViewState extends State<LibraryView> {
                       onDismissed: (DismissDirection direction) async {
                         setState(() {
                           _displayedBooks.removeAt(index);
+                          _allBooks.removeAt(index);
                         });
                       },
-                      child: LibraryTileWidget(book: _displayedBooks[index], editCallback: navigateAndPublishBooks,),
+                      child: LibraryTileWidget(book: _displayedBooks[index], editCallback: navigateAndPublishBooks, index: index),
                     );
                   },
                 ),
@@ -138,9 +153,7 @@ class _LibraryViewState extends State<LibraryView> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          navigateAndPublishBooks(
-              new Book(title: '', author: '', date: DateTime.parse('2000-01-01'), genre: 'Other', description: '')
-          );
+          navigateAndPublishBooks(null, null);
         },
         tooltip: 'Add books',
         child: Icon(

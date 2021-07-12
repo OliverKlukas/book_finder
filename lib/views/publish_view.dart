@@ -6,32 +6,62 @@ import 'package:flutter_typeahead/flutter_typeahead.dart';
 
 class PublishView extends StatefulWidget {
   // hand-over book to publish/edit
-  Book _newBook;
+  late Book _newBook;
+  bool _prefillForm = true;
+
+  // Constructor to edit
   PublishView(this._newBook);
+
+  // Empty constructor to publish only
+  PublishView.empty(){
+    this._newBook = new Book(title: '', author: '', date: DateTime.parse('2000-01-01'), genre: 'Other', description: '');
+    this._prefillForm = false;
+  }
 
   @override
   State<StatefulWidget> createState() => new _PublishViewState();
 }
 
 class _PublishViewState extends State<PublishView> {
+
   // Controller to change date
-  TextEditingController _date = new TextEditingController();
+  TextEditingController _dateController = new TextEditingController();
 
   // key to validate form is filled out properly
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   // controller to allow genre selection overlay
-  final TextEditingController _typeAheadController = TextEditingController();
+  TextEditingController _typeAheadController = TextEditingController();
 
   // assure genre selection bool
   bool _genreSelected = false;
+
+  /// Override init state to allow pre-fill
+  @override
+  void initState(){
+    super.initState();
+    if(widget._prefillForm){
+      this._typeAheadController.text = widget._newBook.genre;
+      _genreSelected = true;
+      this._dateController.text = DateFormat('dd.MM.y').format(widget._newBook.date);
+    }
+  }
 
   /// Publishing Form Tile: ListTile for entering title, author and description
   Widget _publishingFormTile(Icon icon, String objective){
     return ListTile(
       leading: icon,
       title: TextFormField(
-        //initialValue: , // TODO: hier weiter machen morgen musst nur noch uebergeben, dass das klappt!
+        initialValue: ((){
+          if(widget._prefillForm){
+            switch(objective){
+              case 'author': {return widget._newBook.author;}
+              case 'title': {return widget._newBook.title;}
+              case 'description': {return widget._newBook.description;}
+            }
+          }
+          return null;
+        }()),
         decoration: InputDecoration(
           hintText: 'Enter book $objective',
           border: objective == 'description' ? OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(5.0)), borderSide: BorderSide(),) : null,
@@ -116,13 +146,12 @@ class _PublishViewState extends State<PublishView> {
           if (picked != widget._newBook.date)
             setState(() {
               widget._newBook.date = picked;
-              _date.text = DateFormat('dd.MM.y').format(widget._newBook.date);
+              _dateController.text = DateFormat('dd.MM.y').format(widget._newBook.date);
             });
         },
         child: AbsorbPointer(
           child: TextFormField(
-            controller: _date,
-            //autovalidateMode: AutovalidateMode.onUserInteraction,
+            controller: _dateController,
             keyboardType: TextInputType.datetime,
             decoration: InputDecoration(
               hintText: 'Select publication date',
@@ -169,7 +198,7 @@ class _PublishViewState extends State<PublishView> {
         iconTheme: Theme.of(context).iconTheme,
         backgroundColor: Colors.white,
         title: Text(
-          'Publish a new book',
+          'Publish Books',
           style: Theme.of(context).textTheme.headline1,
         ),
       ),
