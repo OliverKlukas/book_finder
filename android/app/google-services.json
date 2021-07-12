@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "760001128348",
+    "project_id": "bookfinder-340aa",
+    "storage_bucket": "bookfinder-340aa.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:760001128348:android:011307432d5206ab6a8a59",
+        "android_client_info": {
+          "package_name": "com.book.finder.book_finder"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "760001128348-1llapvl27s76heolkh2k5bs24evfurr0.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAYzK-2XjO-0cbGibiwQGF3d_T9XbVVrf8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "760001128348-1llapvl27s76heolkh2k5bs24evfurr0.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

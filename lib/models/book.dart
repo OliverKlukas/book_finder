@@ -1,15 +1,18 @@
-import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:intl/intl.dart';
 
 /// Data Model for a single book
-class Book { // TODO: in the backend give this an actual identifier to ensure edit/removing atomicy
+class Book {
+  String id;
   String title;
   String author;
   DateTime date;
   String genre;
   String description;
 
+  /// Constructor for book to define required properties
   Book({
+    required this.id,
     required this.title,
     required this.author,
     required this.date,
@@ -17,7 +20,30 @@ class Book { // TODO: in the backend give this an actual identifier to ensure ed
     required this.description,
   });
 
-  // Enable search for books based on title, author, genre, description or publication year/month
+  /// Ensure typeSafety by converting via json in backend communication
+  Book.fromJson(Map<String, Object?> json)
+      : this(
+    id: '',
+    title: json['title']! as String,
+    author: json['author']! as String,
+    date: DateTime.parse((json['date']! as Timestamp).toDate().toString()),
+    genre: json['genre']! as String,
+    description: json['description']! as String,
+  );
+
+  /// Convert book to Json object
+  Map<String, Object?> toJson(){
+    return {
+      'id': id,
+      'title': title,
+      'author': author,
+      'date': DateFormat('y-dd-MM').format(date),
+      'genre': genre,
+      'description': description,
+    };
+  }
+
+  /// Enable search for books based on title, author, genre, description or publication year/month
   bool contains(String query) {
     return title.toLowerCase().contains(query.toLowerCase()) ||
         author.toLowerCase().contains(query.toLowerCase()) ||

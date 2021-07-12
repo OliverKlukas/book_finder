@@ -14,7 +14,7 @@ class PublishView extends StatefulWidget {
 
   // Empty constructor to publish only
   PublishView.empty(){
-    this._newBook = new Book(title: '', author: '', date: DateTime.parse('2000-01-01'), genre: 'Other', description: '');
+    this._newBook = new Book(id: '', title: '', author: '', date: DateTime.parse('2000-01-01'), genre: 'Other', description: ''); // TODO: nicht mehr richtig für die id
     this._prefillForm = false;
   }
 

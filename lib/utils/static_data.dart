@@ -35,6 +35,7 @@ List<String> genres = [
 ];
 
 /// list of pre-filled books for library
+/** TODO: delete after merge with database
 List<Book> libraryBooks = [
   Book(title: 'Life 3.0: Being Human in the Age of Artificial Intelligence', author: 'Max Tegmark', date: DateTime.parse('2017-08-23'), genre: 'Science',
       description: 'AI is the future - but what will that future look like? Will superhuman intelligence be our slave, or become our god?\n\n'
@@ -79,5 +80,5 @@ List<Book> libraryBooks = [
       description: 'What makes us brilliant? What makes us deadly? What makes us Sapiens? Yuval Noah Harari challenges everything we know about '
           'being human in the perfect read for these unprecedented times.Earth is 4.5 billion years old. In just a fraction of that time, one species'
           ' among countless others has conquered it: us.In this bold and provocative book, Yuval Noah Harari explores who we are, how we got here and where we\'re going.')
-];
+];**/
 

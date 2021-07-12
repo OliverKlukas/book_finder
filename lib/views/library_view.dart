@@ -1,5 +1,4 @@
-import 'package:book_finder/components/library_tile_widget.dart';
-import 'package:book_finder/components/popup_deletion_dialog.dart';
+import 'package:book_finder/components/library_list_widget.dart';
 import 'package:book_finder/models/book.dart';
 import 'package:book_finder/utils/static_data.dart';
 import 'package:book_finder/views/publish_view.dart';
@@ -11,7 +10,8 @@ class LibraryView extends StatefulWidget {
 }
 
 class _LibraryViewState extends State<LibraryView> {
-  // Mock book library
+  // TODO: obsolete when calling firestoreController from EditView!
+  /** // Mock book library
   List<Book> _allBooks = [];
 
   // list of displayed books
@@ -55,14 +55,14 @@ class _LibraryViewState extends State<LibraryView> {
         }
       }
     });
-  }
-
+  }**/
 
   // editing controller for search
   TextEditingController _editingController = TextEditingController();
 
+  // TODO: obsolete when using query instead!
   /// method to search the library for books/authors/genres
-  void _filterSearchResults(String query) {
+  /**void _filterSearchResults(String query) {
     if(query.isNotEmpty) {
       List<Book> displayQuery = [];
       _allBooks.forEach((item) {
@@ -81,7 +81,7 @@ class _LibraryViewState extends State<LibraryView> {
         _displayedBooks.addAll(_allBooks);
       });
     }
-  }
+  } **/
 
   /// build the complete library view widget
   @override
@@ -102,7 +102,7 @@ class _LibraryViewState extends State<LibraryView> {
                 padding: EdgeInsets.only(top: 16,left: 16,right: 16),
                 child: TextField(
                   onChanged: (value) {
-                    _filterSearchResults(value);
+                    //_filterSearchResults(value); //TODO: query
                   },
                   controller: _editingController,
                   decoration: InputDecoration(
@@ -122,32 +122,7 @@ class _LibraryViewState extends State<LibraryView> {
                 ),
               ),
               Expanded(
-                child: ListView.builder(
-                  itemCount: _displayedBooks.length,
-                  padding: EdgeInsets.all(10.0),
-                  itemBuilder: (BuildContext context, int index) {
-                    return Dismissible(
-                      direction: DismissDirection.endToStart,
-                      background: Container(
-                        color: Colors.red,
-                        alignment: Alignment.centerRight,
-                        padding: EdgeInsets.symmetric(horizontal: 10.0),
-                        child: Icon(Icons.delete),
-                      ),
-                      key: Key(_displayedBooks[index].title), // TODO: make this the backend id?
-                      confirmDismiss: (DismissDirection direction) async{
-                        return await popupDeletionDialog(context);
-                      },
-                      onDismissed: (DismissDirection direction) async {
-                        setState(() {
-                          _displayedBooks.removeAt(index);
-                          _allBooks.removeAt(index);
-                        });
-                      },
-                      child: LibraryTileWidget(book: _displayedBooks[index], editCallback: navigateAndPublishBooks, index: index, maxHeight: constraints.maxHeight, maxWidth: constraints.maxWidth),
-                    );
-                  },
-                ),
+                child: LibraryListWidget(constraints),
               ),
             ],
           );
@@ -155,7 +130,7 @@ class _LibraryViewState extends State<LibraryView> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          navigateAndPublishBooks(null, null);
+          // navigateAndPublishBooks(null, null); TODO: no need to come back anymore!
         },
         tooltip: 'Add books',
         child: Icon(
@@ -166,4 +141,3 @@ class _LibraryViewState extends State<LibraryView> {
     );
   }
 }
-

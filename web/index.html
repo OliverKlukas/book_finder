@@ -41,5 +41,31 @@
     }
   </script>
   <script src="main.dart.js" type="application/javascript"></script>
+
+  <!-- The core Firebase JS SDK is always required and must be listed first -->
+  <script src="https://www.gstatic.com/firebasejs/8.7.1/firebase-app.js"></script>
+
+  <!-- Add SDKs for Firebase products that you want to use
+       https://firebase.google.com/docs/web/setup#available-libraries -->
+  <script src="https://www.gstatic.com/firebasejs/8.7.1/firebase-analytics.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.7.1/firebase-firestore.js"></script>
+
+  <script>
+  // Your web app's Firebase configuration
+  // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+  var firebaseConfig = {
+    apiKey: "AIzaSyCbmMrMOr5ehXYwIJrH1mmv4wVqZ69L55Y",
+    authDomain: "bookfinder-340aa.firebaseapp.com",
+    projectId: "bookfinder-340aa",
+    storageBucket: "bookfinder-340aa.appspot.com",
+    messagingSenderId: "760001128348",
+    appId: "1:760001128348:web:45dbd1f3ff2b894c6a8a59",
+    measurementId: "G-J3N9NQRY9E"
+  };
+  // Initialize Firebase
+  firebase.initializeApp(firebaseConfig);
+  firebase.analytics();
+</script>
+
 </body>
 </html>

@@ -68,16 +68,11 @@ class _BookDescription extends StatelessWidget {
   }
 }
 
-// typedef for allowing to access the parent function to edit books
-typedef EditCallback = void Function(Book book, int index);
-
 /// Widget: library tile
 class LibraryTileWidget extends StatelessWidget {
   LibraryTileWidget({
     Key? key,
     required this.book,
-    required this.editCallback,
-    required this.index,
     required this.maxWidth,
     required this.maxHeight,
   }) : super(key: key);
@@ -88,12 +83,6 @@ class LibraryTileWidget extends StatelessWidget {
 
   // book to show in tile
   Book book;
-
-  // index to enable in-place like editing
-  int index;
-
-  // callback to edit a book
-  EditCallback editCallback;
 
   /// method to enable responsive tile scaling
   double _responsiveSize(){
@@ -137,7 +126,7 @@ class LibraryTileWidget extends StatelessWidget {
           ),
           trailing: PopupMenuButton<String>(
             onSelected: (_){
-              editCallback(book, index);
+              // TODO: enable editing via firebase_connection
             },
             itemBuilder: (BuildContext context) => <PopupMenuEntry<String>>[
               const PopupMenuItem<String>(
