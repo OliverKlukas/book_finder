@@ -1,4 +1,4 @@
-import 'package:book_finder/controller/firebase_connection.dart';
+import 'package:book_finder/controller/firestore_controller.dart';
 import 'package:book_finder/views/library_view.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';

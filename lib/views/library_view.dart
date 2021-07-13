@@ -1,6 +1,7 @@
+import 'dart:async';
+
 import 'package:book_finder/components/library_list_widget.dart';
-import 'package:book_finder/models/book.dart';
-import 'package:book_finder/utils/static_data.dart';
+import 'package:book_finder/controller/firestore_controller.dart';
 import 'package:book_finder/views/publish_view.dart';
 import 'package:flutter/material.dart';
 
@@ -10,78 +11,37 @@ class LibraryView extends StatefulWidget {
 }
 
 class _LibraryViewState extends State<LibraryView> {
-  // TODO: obsolete when calling firestoreController from EditView!
-  /** // Mock book library
-  List<Book> _allBooks = [];
-
-  // list of displayed books
-  List<Book> _displayedBooks = [];
-
-  // initialize view
-  @override
-  void initState() {
-    _allBooks.addAll(libraryBooks);
-    _displayedBooks.addAll(_allBooks);
-    super.initState();
-  }
-
-  /// method that will start the process of publishing/editing new books and capture the added element
-  void navigateAndPublishBooks(Book? editBook, int? index) async {
-    // receive new book from PublishView after validation
-    final Book? newBook = await Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => editBook == null ? PublishView.empty() : PublishView(editBook),
-      ),
-    );
-
-    // add newly published book to collection
-    setState(() { //TODO: improve this with proper backend
-      // check that publish form wasn't exited early
-      if (newBook != null) {
-        // Replace an already existing book with edited version
-        if(editBook != null){
-          _displayedBooks.remove(editBook);
-          _allBooks.remove(editBook);
-        }
-        // Publish book
-        if(index != null){
-          _displayedBooks.insert(index, newBook);
-          _allBooks.insert(index, newBook);
-        }
-        else{
-          _displayedBooks.insert(0, newBook);
-          _allBooks.insert(0, newBook);
-        }
-      }
-    });
-  }**/
-
   // editing controller for search
   TextEditingController _editingController = TextEditingController();
 
-  // TODO: obsolete when using query instead!
+  // instance of firestore database controller
+  FirestoreController _firestoreController = FirestoreController();
+
+  // query library view based on user input
+  String searchQuery = '';
+
   /// method to search the library for books/authors/genres
-  /**void _filterSearchResults(String query) {
+  void _filterSearchResults(String query) {
     if(query.isNotEmpty) {
-      List<Book> displayQuery = [];
-      _allBooks.forEach((item) {
-        if(item.contains(query)) {
-          displayQuery.add(item);
-        }
-      });
       setState(() {
-        _displayedBooks.clear();
-        _displayedBooks.addAll(displayQuery);
+        searchQuery = query;
       });
       return;
     } else {
       setState(() {
-        _displayedBooks.clear();
-        _displayedBooks.addAll(_allBooks);
+        searchQuery = '';
       });
     }
-  } **/
+  }
+
+  // timer to smoothen search animation
+  Timer? _debounce;
+
+  @override
+  void dispose() {
+    _debounce?.cancel();
+    super.dispose();
+  }
 
   /// build the complete library view widget
   @override
@@ -93,6 +53,19 @@ class _LibraryViewState extends State<LibraryView> {
         title: Text('Library',
           style: Theme.of(context).textTheme.headline1,
         ),
+          actions: [
+            PopupMenuButton<String>(
+              onSelected: (_) async {
+                await _firestoreController.reset();
+              },
+              itemBuilder: (BuildContext context) => <PopupMenuEntry<String>>[
+                const PopupMenuItem<String>(
+                  value: 'Reset Library',
+                  child: Text('Reset Library'),
+                ),
+              ],
+            ),
+          ],
       ),
       body: LayoutBuilder(
         builder: (BuildContext context, BoxConstraints constraints) {
@@ -101,8 +74,12 @@ class _LibraryViewState extends State<LibraryView> {
               Padding(
                 padding: EdgeInsets.only(top: 16,left: 16,right: 16),
                 child: TextField(
-                  onChanged: (value) {
-                    //_filterSearchResults(value); //TODO: query
+                  onChanged: (query) {
+                    if(_debounce?.isActive ?? false) _debounce!.cancel();
+                    _debounce = Timer(const Duration(milliseconds: 500), (){
+                      _filterSearchResults(query);
+                    }
+                    );
                   },
                   controller: _editingController,
                   decoration: InputDecoration(
@@ -122,7 +99,7 @@ class _LibraryViewState extends State<LibraryView> {
                 ),
               ),
               Expanded(
-                child: LibraryListWidget(constraints),
+                child: LibraryListWidget(constraints, searchQuery),
               ),
             ],
           );
@@ -130,7 +107,12 @@ class _LibraryViewState extends State<LibraryView> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          // navigateAndPublishBooks(null, null); TODO: no need to come back anymore!
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => PublishView.empty(),
+            ),
+          );
         },
         tooltip: 'Add books',
         child: Icon(

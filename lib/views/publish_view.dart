@@ -1,3 +1,4 @@
+import 'package:book_finder/controller/firestore_controller.dart';
 import 'package:book_finder/models/book.dart';
 import 'package:book_finder/utils/static_data.dart';
 import 'package:flutter/material.dart';
@@ -24,14 +25,17 @@ class PublishView extends StatefulWidget {
 
 class _PublishViewState extends State<PublishView> {
 
-  // Controller to change date
-  TextEditingController _dateController = new TextEditingController();
-
   // key to validate form is filled out properly
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
+  // Controller to change date
+  TextEditingController _dateController = new TextEditingController();
+
   // controller to allow genre selection overlay
   TextEditingController _typeAheadController = TextEditingController();
+
+  // instance of firestore database controller
+  FirestoreController _firestoreController = FirestoreController();
 
   // assure genre selection bool
   bool _genreSelected = false;
@@ -179,10 +183,24 @@ class _PublishViewState extends State<PublishView> {
           padding: EdgeInsets.symmetric(horizontal: 35, vertical: 15),
           textStyle: TextStyle(fontSize: 20),
         ),
-        onPressed: () {
+        onPressed: () async {
           // Only process the data if the form is filled out validly
           if (_formKey.currentState!.validate()) {
-            Navigator.pop(context, widget._newBook);
+            // add or edit book to database
+            if(widget._prefillForm){
+              // update of already published book
+              try {
+                await _firestoreController.updateBook(widget._newBook);
+              } catch (error) { // atomcy handling, if book was deleted in meantime TODO: unsauberer coding stil?
+                await _firestoreController.addBook(widget._newBook);
+              }
+            }
+            else{
+              // publication of new book
+              await _firestoreController.addBook(widget._newBook);
+            }
+            // back to library view
+            Navigator.pop(context);
           }
         },
         child: const Text('Publish'),

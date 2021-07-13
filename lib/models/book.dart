@@ -37,17 +37,16 @@ class Book {
       'id': id,
       'title': title,
       'author': author,
-      'date': DateFormat('y-dd-MM').format(date),
+      'date': Timestamp.fromDate(date),
       'genre': genre,
       'description': description,
     };
   }
 
-  /// Enable search for books based on title, author, genre, description or publication year/month
+  /// Enable search for books based on substrings of title, author, genre or publication year/month
   bool contains(String query) {
     return title.toLowerCase().contains(query.toLowerCase()) ||
         author.toLowerCase().contains(query.toLowerCase()) ||
-        description.toLowerCase().contains(query.toLowerCase()) ||
         DateFormat('M.y').format(date).toString().toLowerCase().contains(query.toLowerCase()) ||
         genre.toLowerCase().contains(query.toLowerCase());
   }

@@ -1,18 +1,46 @@
+import 'package:book_finder/controller/firestore_controller.dart';
 import 'package:book_finder/models/book.dart';
+import 'package:book_finder/views/publish_view.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 class DetailsView extends StatefulWidget {
   // hand-over book for detailed view
-  final Book book;
+  Book book;
 
-  const DetailsView(this.book);
+  DetailsView(this.book);
 
   @override
   State<StatefulWidget> createState() => new _DetailsViewState();
 }
 
 class _DetailsViewState extends State<DetailsView> {
+  /// instance of firestore database controller
+  FirestoreController _firestoreController = FirestoreController();
+
+  /// Method to handle menu action to edit/delete the book
+  Future<void> handleMenuAction(String action) async {
+    switch (action) {
+      case 'Edit': {
+        await Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => PublishView(widget.book),
+          ),
+        );
+        setState(() {});
+      }
+        break;
+      case 'Delete':{
+        // await deletion
+        await _firestoreController.deleteBook(widget.book.id);
+        // back to library view
+        Navigator.pop(context);
+      }
+        break;
+    }
+  }
+
   /// Widget: widget of details view
   @override
   Widget build(BuildContext context) {
@@ -24,6 +52,19 @@ class _DetailsViewState extends State<DetailsView> {
           'Book Details',
           style: Theme.of(context).textTheme.headline1,
         ),
+        actions: <Widget>[
+          PopupMenuButton<String>(
+            onSelected: handleMenuAction,
+            itemBuilder: (BuildContext context) {
+              return {'Edit', 'Delete'}.map((String choice) {
+                return PopupMenuItem<String>(
+                  value: choice,
+                  child: Text(choice),
+                );
+              }).toList();
+            },
+          ),
+        ],
       ),
       body: LayoutBuilder(
           builder: (BuildContext context, BoxConstraints constraints) {

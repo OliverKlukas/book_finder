@@ -1,5 +1,6 @@
 import 'package:book_finder/models/book.dart';
 import 'package:book_finder/views/details_view.dart';
+import 'package:book_finder/views/publish_view.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -126,7 +127,13 @@ class LibraryTileWidget extends StatelessWidget {
           ),
           trailing: PopupMenuButton<String>(
             onSelected: (_){
-              // TODO: enable editing via firebase_connection
+              // TODO: FRONTEND DESIGN - maybe make a selectable list tile with a popup button on appbar for editing or? because then mobile looks better!
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => PublishView(book),
+                ),
+              );
             },
             itemBuilder: (BuildContext context) => <PopupMenuEntry<String>>[
               const PopupMenuItem<String>(
