@@ -86,7 +86,7 @@ class _DetailsViewState extends State<DetailsView> {
                       image: DecorationImage(
                         fit: BoxFit.fill,
                         image: Image.asset(
-                            'images/${widget.book.genre.toLowerCase().replaceAll(' ', '')}.png')
+                            'assets/images/${widget.book.genre.toLowerCase().replaceAll(' ', '')}.png')
                             .image,
                       ),
                     ),

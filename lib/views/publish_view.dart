@@ -232,9 +232,9 @@ class _PublishViewState extends State<PublishView> {
                 fit: BoxFit.fill,
                 image: genres.contains(widget._newBook.genre)
                     ? Image.asset(
-                            'images/${widget._newBook.genre.toLowerCase().replaceAll(' ', '')}.png')
+                            'assets/images/${widget._newBook.genre.toLowerCase().replaceAll(' ', '')}.png')
                         .image
-                    : Image.asset('images/other.png').image,
+                    : Image.asset('assets/images/other.png').image,
               ),
             ),
           )

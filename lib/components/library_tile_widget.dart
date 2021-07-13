@@ -112,7 +112,7 @@ class LibraryTileWidget extends StatelessWidget {
                   aspectRatio: 1.0,
                   child: CircleAvatar(
                     backgroundImage: Image.asset(
-                            'images/${book.genre.toLowerCase().replaceAll(' ', '')}.png')
+                            'assets/images/${book.genre.toLowerCase().replaceAll(' ', '')}.png')
                         .image,
                   ),
                 ),
