@@ -1,13 +1,15 @@
+import 'package:book_finder/components/library_list_widget.dart';
 import 'package:book_finder/models/book.dart';
 import 'package:book_finder/views/details_view.dart';
 import 'package:book_finder/views/publish_view.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
+/// The composition of the book description of the list tiles in the book list.
 class _BookDescription extends StatelessWidget {
-  const _BookDescription({Key? key, required this.book}) : super(key: key);
-
   final Book book;
+
+  _BookDescription({Key? key, required this.book}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -31,6 +33,7 @@ class _BookDescription extends StatelessWidget {
               Text(
                 book.author,
                 maxLines: 1,
+                overflow: TextOverflow.ellipsis,
                 style: TextStyle(
                   fontSize: 18.0,
                   color: Colors.black54,
@@ -55,7 +58,7 @@ class _BookDescription extends StatelessWidget {
               ),
               Text(
                 DateFormat('dd.MM.y').format(book.date),
-              maxLines: 1,
+                maxLines: 1,
                 style: TextStyle(
                   fontSize: 18.0,
                   color: Colors.black54,
@@ -69,40 +72,42 @@ class _BookDescription extends StatelessWidget {
   }
 }
 
-/// Widget: library tile
-class LibraryTileWidget extends StatelessWidget {
-  LibraryTileWidget({
+/// Composition and functionality of a single book tile in the [BookListWidget].
+class BookTileWidget extends StatelessWidget {
+  BookTileWidget({
     Key? key,
     required this.book,
     required this.maxWidth,
     required this.maxHeight,
   }) : super(key: key);
 
-  // size dimensions to ensure responsive design
-  double maxHeight;
-  double maxWidth;
+  /// Size dimensions to ensure responsive resizing of list tiles.
+  final double maxHeight;
+  final double maxWidth;
 
-  // book to show in tile
-  Book book;
+  /// Book to show in the list tile.
+  final Book book;
 
-  /// method to enable responsive tile scaling
-  double _responsiveSize(){
-    // landscape format
-    if(maxWidth > maxHeight){
-      return maxHeight/6 > 100.0 ? maxHeight/6 : 100.0;
+  /// Decides depending on the screen ratio how large the list tiles can be scaled.
+  double _responsiveSize() {
+    // Displaying device is in landscape format.
+    if (maxWidth > maxHeight) {
+      return maxHeight / 6 > 100.0 ? maxHeight / 6 : 100.0;
     }
-    // portrait format
-    else{
-      return maxWidth/6 > 100.0 ? maxWidth/6 : 100.0;
+    // Displaying device is in portrait format.
+    else {
+      return maxWidth / 6 > 100.0 ? maxWidth / 6 : 100.0;
     }
   }
 
+  /// Build a single book list tile that enables routing to edit, view and delete books.
   @override
   Widget build(BuildContext context) {
     return Card(
         color: Colors.white,
         child: ListTile(
-          contentPadding: EdgeInsets.only(left: 10,right: 10,top: 5,bottom: 5),
+          contentPadding:
+              EdgeInsets.only(left: 10, right: 10, top: 5, bottom: 5),
           title: SizedBox(
             height: _responsiveSize(),
             child: Row(
@@ -126,8 +131,7 @@ class LibraryTileWidget extends StatelessWidget {
             ),
           ),
           trailing: PopupMenuButton<String>(
-            onSelected: (_){
-              // TODO: FRONTEND DESIGN - maybe make a selectable list tile with a popup button on appbar for editing or? because then mobile looks better!
+            onSelected: (_) {
               Navigator.push(
                 context,
                 MaterialPageRoute(
@@ -136,7 +140,7 @@ class LibraryTileWidget extends StatelessWidget {
               );
             },
             itemBuilder: (BuildContext context) => <PopupMenuEntry<String>>[
-              const PopupMenuItem<String>(
+              PopupMenuItem<String>(
                 value: 'Edit',
                 child: Text('Edit'),
               ),
@@ -150,7 +154,6 @@ class LibraryTileWidget extends StatelessWidget {
               ),
             );
           },
-        )
-    );
+        ));
   }
 }
