@@ -1,18 +1,20 @@
 # Welcome to book_finder!
 
-**WIP - do not publish before submission**
-
-Hi there :wave:! This is my book finder implementation for the assessment challenge by Digital Product School. I chose a responsive Flutter-based application with a realtime database using Google Firestore with deployment to the Firebase cloud. Fully working prototypes including frontend & backend for Android, iOS and web as seen below. You may find the deployed web version at: TODO. Enjoy :closed_book:!
+Hi there :wave:! </br>
+This is my book finder implementation for Digital Product School's assessment challenge. I opted for a responsive Flutter application with a real-time database using Google Firestore. Fully functional prototypes including frontend & backend for mobile (Android) and web as seen below. The web version deployed on Google Firebase hosting can be found at this [link](https://dps-challenge-book-finder.web.app/).</br>
+Enjoy :closed_book:!
 
 ## Full product at a glance
-| Android | iOS | Web app |
-| :---: | :---: | :---: |
-| TODO: gif | TODO: gif | TODO: gif, link to deployed URL |
+| Android | Web |
+| :---: | :---: |
+| ![Mobile app product](media/mobile_demo.gif) | ![Web app product](media/web_demo.gif) |
+|  | [Deployed web page](https://dps-challenge-book-finder.web.app/) |
 
-## Mission plan & goals - 72h implementation challenge
-| Saturday | Sunday | Monday | Tuesday |
-| --- | --- | --- | --- |
-| - ideate implementation vision including design, architecture, frameworks <br /> - start of development | - working frontend prototype | - working backend prototpye | - deployment & finishing touches </br > - submission |
+## Instructions & Hints
+To set up the book_finder application on your own devices, please follow the following guidance steps:
+1. To start the project, please open the project in your favorite IDE (Android Studio, IntelliJ, ...).
+2. The first file you are looking for is the lib/main.dart file.
+3. Execute the main.dart file. The app may either be deployed on a web or android device.
 
 ## Challenge
 Full challenge at [DPS challenge webpage](https://dps-challenge-front.netlify.app/bookfinderapp)!

@@ -123,7 +123,7 @@ List<Book> bookShelf = [
       title: '1984',
       author: 'George Orwell',
       date: DateTime.parse('1949-08-06'),
-      genre: 'Science Fiction',
+      genre: 'Science fiction',
       description:
           'Winston Smith works for the Ministry of Truth in London, chief city of Airstrip One. '
           'Big Brother stares out from every poster, the Thought Police uncover every act of betrayal.'
